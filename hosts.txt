@@ -1,0 +1,9 @@
+[test_servers]
+linux1	ansible_host=172.31.29.232  owner=Vasya
+
+[prod_servers]
+linux2	ansible_host=172.31.30.172  owner=Petya
+
+[ALL_servers:children]
+test_servers
+prod_servers

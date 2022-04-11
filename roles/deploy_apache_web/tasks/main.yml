@@ -1,0 +1,27 @@
+---
+# tasks file for deploy_apache_web
+- block:     #======Block for Redhat=====
+    - name: Install Apache Web Server for RedHat
+      yum: name=httpd state=latest
+    - name: Start Web Server service for RedHat
+      service: name=httpd state=started enabled=yes
+  when: ansible_os_family == "RedHat"
+
+- name: Generate index.html file
+  template: src=index.j2 dest={{ destin_folder }}/index.html mode=0555
+  notify:
+     - Restart Apache RedHat
+
+- name: Copy HomePage file to Server
+  copy: src={{ item }} dest={{ destin_folder }} mode=0555
+  loop:
+     - "cart1.jpg"
+     - "cart2.jpg"
+     - "cart3.jpg"
+     - "cart4.jpg"
+  notify:
+     - Restart Apache RedHat
+
+- name: print os family
+  debug:
+    msg: "OS this Server is: {{ ansible_os_family }}"
